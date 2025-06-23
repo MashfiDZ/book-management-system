@@ -5,6 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfig } from './config/database.config';
 import { AuthorsModule } from './authors/authors.module';
+import { BooksModule } from './books/books.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { AuthorsModule } from './authors/authors.module';
       envFilePath: '.env.local',
     }),
     AuthorsModule,
+    BooksModule,
   ],
   controllers: [AppController],
   providers: [
