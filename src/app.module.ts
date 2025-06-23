@@ -4,6 +4,7 @@ import { APP_PIPE } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseConfig } from './config/database.config';
+import { AuthorsModule } from './authors/authors.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { DatabaseConfig } from './config/database.config';
       isGlobal: true,
       envFilePath: '.env.local',
     }),
+    AuthorsModule,
   ],
   controllers: [AppController],
   providers: [
