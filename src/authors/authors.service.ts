@@ -38,13 +38,11 @@ export class AuthorsService {
     return this.mapToEntity(data);
   }
 
-  async findAll(
-    query: QueryAuthorDto,
-  ): Promise<{ data: Author[]; total: number }> {
-    const supabase = this.databaseConfig.getClient();
-    const page = parseInt(query.page) || 1;
-    const limit = parseInt(query.limit) || 10;
-    const offset = (page - 1) * limit;
+  async findAll(query: QueryAuthorDto): Promise<{ data: Author[]; total: number }> {
+  const supabase = this.databaseConfig.getClient();
+  const page = parseInt(query.page || '1');
+  const limit = parseInt(query.limit || '10');
+  const offset = (page - 1) * limit;
 
     let queryBuilder = supabase.from('authors').select('*', { count: 'exact' });
 

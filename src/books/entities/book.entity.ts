@@ -6,8 +6,7 @@ export class Book {
   isbn: string;
   publishedDate?: Date;
   genre?: string;
-  authorId: string;
-  author?: Author; // For populated responses
+  author: Author; // Make this required since we always include it
   createdAt: Date;
   updatedAt: Date;
 

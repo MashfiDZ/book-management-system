@@ -6,8 +6,7 @@ export class BookDto {
   isbn: string;
   publishedDate?: string;
   genre?: string;
-  authorId: string;
-  author?: AuthorDto; // Include author information in responses
+  author: AuthorDto; // Remove authorId, keep only author object
   createdAt: string;
   updatedAt: string;
 }

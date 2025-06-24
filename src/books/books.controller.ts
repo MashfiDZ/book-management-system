@@ -26,18 +26,22 @@ export class BooksController {
   }
 
   @Get()
-  async findAll(@Query() query: QueryBookDto) {
-    const result = await this.booksService.findAll(query);
-    return {
-      data: result.data,
-      meta: {
-        total: result.total,
-        page: parseInt(query.page) || 1,
-        limit: parseInt(query.limit) || 10,
-        totalPages: Math.ceil(result.total / (parseInt(query.limit) || 10)),
-      },
-    };
-  }
+async findAll(@Query() query: QueryBookDto) {
+  const result = await this.booksService.findAll(query);
+  const page = parseInt(query.page || '1');
+  const limit = parseInt(query.limit || '10');
+  
+  return {
+    data: result.data,
+    meta: {
+      total: result.total,
+      page: page,
+      limit: limit,
+      totalPages: Math.ceil(result.total / limit),
+    },
+  };
+}
+
 
   @Get(':id')
   async findOne(@Param('id') id: string) {

@@ -71,10 +71,10 @@ export class BooksService {
   }
 
   async findAll(query: QueryBookDto): Promise<{ data: Book[]; total: number }> {
-    const supabase = this.databaseConfig.getClient();
-    const page = parseInt(query.page) || 1;
-    const limit = parseInt(query.limit) || 10;
-    const offset = (page - 1) * limit;
+  const supabase = this.databaseConfig.getClient();
+  const page = parseInt(query.page || '1');
+  const limit = parseInt(query.limit || '10');
+  const offset = (page - 1) * limit;
 
     let queryBuilder = supabase.from('books').select(
       `
@@ -259,29 +259,23 @@ export class BooksService {
 
   private mapToEntity(data: any): Book {
     return new Book({
-      id: data.id,
-      title: data.title,
-      isbn: data.isbn,
-      publishedDate: data.published_date
-        ? new Date(data.published_date)
-        : undefined,
-      genre: data.genre,
-      authorId: data.author_id,
-      author: data.authors
-        ? {
-            id: data.authors.id,
-            firstName: data.authors.first_name,
-            lastName: data.authors.last_name,
-            bio: data.authors.bio,
-            birthDate: data.authors.birth_date
-              ? new Date(data.authors.birth_date)
-              : undefined,
-            createdAt: new Date(data.authors.created_at),
-            updatedAt: new Date(data.authors.updated_at),
-          }
-        : undefined,
-      createdAt: new Date(data.created_at),
-      updatedAt: new Date(data.updated_at),
+        id: data.id,
+        title: data.title,
+        isbn: data.isbn,
+        publishedDate: data.published_date ? new Date(data.published_date) : undefined,
+        genre: data.genre,
+        // Remove this line: authorId: data.author_id,
+        author: {
+        id: data.authors.id,
+        firstName: data.authors.first_name,
+        lastName: data.authors.last_name,
+        bio: data.authors.bio,
+        birthDate: data.authors.birth_date ? new Date(data.authors.birth_date) : undefined,
+        createdAt: new Date(data.authors.created_at),
+        updatedAt: new Date(data.authors.updated_at),
+        },
+        createdAt: new Date(data.created_at),
+        updatedAt: new Date(data.updated_at),
     });
   }
 }
