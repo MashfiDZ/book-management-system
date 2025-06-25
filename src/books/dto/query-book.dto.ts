@@ -19,7 +19,7 @@ export class QueryBookDto {
 
   @IsOptional()
   @IsUUID()
-  authorId?: string; // Filter books by specific author
+  authorId?: string;
 
   @IsOptional()
   @IsString()
