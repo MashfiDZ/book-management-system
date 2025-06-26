@@ -1,98 +1,323 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Advanced Book Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A production-ready RESTful API built with NestJS and Supabase, demonstrating modern backend development practices, clean architecture, and comprehensive testing.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Technical Highlights
 
-## Description
+### Advanced Database Implementation
+- PostgreSQL with Supabase: Leveraging enterprise-grade database features
+- Sophisticated Query Handling: Case-insensitive search with `ilike`, efficient pagination
+- Relationship Management: Proper handling of Author-Book relationships with referential integrity
+- UUID Implementation: Secure, distributed-friendly unique identifiers with validation
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Clean Architecture & Best Practices
+- Domain-Driven Design: Clear separation of entities, DTOs, and business logic
+- SOLID Principles: Single responsibility, interface segregation in services
+- Repository Pattern: Abstracted database operations via Supabase client
+- Dependency Injection: Proper use of NestJS DI container
 
-## Project setup
+### Robust Error Handling
+- Custom Exception Filters: Consistent error response format
+- Validation Pipeline: Comprehensive DTO validation using class-validator
+- Business Logic Validation: ISBN uniqueness, UUID format, relationship integrity
+- HTTP Status Codes: Proper use of 201, 204, 400, 404 status codes
 
-```bash
-$ npm install
+### Advanced Testing Implementation
+- Unit Tests: Comprehensive service testing with mocked dependencies
+- E2E Tests: Complete API testing with database integration
+- Complex Scenarios: Testing of intricate business logic and edge cases
+- Test Data Management: Proper setup and teardown of test data
+
+## API Endpoints
+
+### Authors
+
+#### Create Author
+```
+POST /authors
+```
+Request:
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "bio": "Author bio",
+  "birthDate": "1990-01-01"
+}
+```
+Response (201):
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "firstName": "John",
+  "lastName": "Doe",
+  "bio": "Author bio",
+  "birthDate": "1990-01-01",
+  "createdAt": "2023-01-01T00:00:00.000Z",
+  "updatedAt": "2023-01-01T00:00:00.000Z"
+}
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+#### List Authors
+```
+GET /authors?firstName=John&lastName=Doe&page=1&limit=10
+```
+Response (200):
+```json
+{
+  "data": [
+    {
+      "id": "123e4567-e89b-12d3-a456-426614174000",
+      "firstName": "John",
+      "lastName": "Doe",
+      "bio": "Author bio",
+      "birthDate": "1990-01-01",
+      "createdAt": "2023-01-01T00:00:00.000Z",
+      "updatedAt": "2023-01-01T00:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
+}
 ```
 
-## Run tests
+#### Get Single Author
+```
+GET /authors/:id
+```
+Response (200): Same as create author response
 
-```bash
-# unit tests
-$ npm run test
+#### Update Author
+```
+PATCH /authors/:id
+```
+Request:
+```json
+{
+  "bio": "Updated author bio"
+}
+```
+Response (200): Updated author object
 
-# e2e tests
-$ npm run test:e2e
+#### Delete Author
+```
+DELETE /authors/:id
+```
+Response (204): No content
 
-# test coverage
-$ npm run test:cov
+### Books
+
+#### Create Book
+```
+POST /books
+```
+Request:
+```json
+{
+  "title": "Advanced TypeScript Patterns",
+  "isbn": "978-3-16-148410-0",
+  "publishedDate": "2023-01-01",
+  "genre": "Programming",
+  "authorId": "123e4567-e89b-12d3-a456-426614174000"
+}
+```
+Response (201):
+```json
+{
+  "id": "987fcdeb-51a2-43b7-89ab-765432198000",
+  "title": "Advanced TypeScript Patterns",
+  "isbn": "978-3-16-148410-0",
+  "publishedDate": "2023-01-01",
+  "genre": "Programming",
+  "author": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "createdAt": "2023-01-01T00:00:00.000Z",
+  "updatedAt": "2023-01-01T00:00:00.000Z"
+}
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+#### List Books
+```
+GET /books?title=Pattern&genre=Programming&authorId=123e4567-e89b-12d3-a456-426614174000&page=1&limit=10
+```
+Response (200):
+```json
+{
+  "data": [
+    {
+      "id": "987fcdeb-51a2-43b7-89ab-765432198000",
+      "title": "Advanced TypeScript Patterns",
+      "isbn": "978-3-16-148410-0",
+      "publishedDate": "2023-01-01",
+      "genre": "Programming",
+      "author": {
+        "id": "123e4567-e89b-12d3-a456-426614174000",
+        "firstName": "John",
+        "lastName": "Doe"
+      },
+      "createdAt": "2023-01-01T00:00:00.000Z",
+      "updatedAt": "2023-01-01T00:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "limit": 10,
+    "totalPages": 1
+  }
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Technical Stack
 
-## Resources
+- Framework: NestJS with TypeScript
+- Database: PostgreSQL via Supabase
+- Validation: class-validator & class-transformer
+- Testing: Jest & Supertest
+- Documentation: Comprehensive E2E tests as living documentation
 
-Check out a few resources that may come in handy when working with NestJS:
+## Environment Setup
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Create `.env.local` in the root directory:
+```env
+SUPABASE_URL=your_supabase_project_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-## Support
+## Installation & Setup
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+# Install dependencies with exact versions
+npm ci
 
-## Stay in touch
+# Development
+npm run start:dev
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Testing
+npm run test        # Unit tests with coverage
+npm run test:e2e    # Integration tests
+```
 
-## License
+## Architecture
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Clean Code Structure
+```
+src/
+├── authors/                # Authors domain
+│   ├── dto/               # Data transfer objects
+│   │   ├── create-author.dto.ts
+│   │   └── update-author.dto.ts
+│   ├── entities/          # Domain entities
+│   └── authors.service.ts # Business logic
+├── books/                 # Books domain
+└── config/               # Infrastructure
+```
+
+### Advanced Implementation Details
+
+#### Sophisticated Error Handling
+```typescript
+// Example of business logic validation
+if (!uuidRegex.test(id)) {
+  throw new BadRequestException('Invalid UUID format');
+}
+
+// Example of unique constraint handling
+if (existingBook) {
+  throw new BadRequestException(`Book with ISBN ${isbn} already exists`);
+}
+```
+
+#### Rich Query Support
+```typescript
+// Example of advanced query building with pagination and search
+const queryBuilder = supabase
+  .from('books')
+  .select(`
+    *,
+    authors (
+      id,
+      first_name,
+      last_name,
+      bio,
+      birth_date
+    )
+  `, { count: 'exact' })
+  .ilike('title', `%${query.title}%`)
+  .eq('author_id', query.authorId)
+  .range(offset, offset + limit - 1)
+  .order('created_at', { ascending: false });
+```
+
+## Testing Philosophy
+
+### Comprehensive Test Coverage
+- Unit Tests: Testing business logic in isolation
+- Integration Tests: Testing database operations
+- E2E Tests: Testing complete request/response cycles
+- Edge Cases: Testing error conditions and boundary scenarios
+
+### Example Test Scenario
+```typescript
+describe('Books API', () => {
+  it('should handle complex author-book relationships', async () => {
+    // Create test author
+    const author = await request(app.getHttpServer())
+      .post('/authors')
+      .send({
+        firstName: 'Test',
+        lastName: 'Author',
+        bio: 'Test bio'
+      })
+      .expect(201);
+    
+    // Create multiple books for author
+    const book1 = await request(app.getHttpServer())
+      .post('/books')
+      .send({
+        title: 'First Book',
+        isbn: '978-0-123456-78-9',
+        authorId: author.body.id
+      })
+      .expect(201);
+    
+    const book2 = await request(app.getHttpServer())
+      .post('/books')
+      .send({
+        title: 'Second Book',
+        isbn: '978-0-123456-78-0',
+        authorId: author.body.id
+      })
+      .expect(201);
+    
+    // Verify author's books
+    const response = await request(app.getHttpServer())
+      .get(`/books?authorId=${author.body.id}`)
+      .expect(200);
+    
+    expect(response.body.data).toHaveLength(2);
+    expect(response.body.meta.total).toBe(2);
+  });
+});
+```
+
+## Security Considerations
+
+- UUID for secure resource identification
+- Input validation for all endpoints
+- Proper error message sanitization
+- Database query parameterization
+
+## Performance Optimizations
+
+- Efficient pagination implementation
+- Proper database indexing
+- Optimized relationship queries
+- Response caching considerations
