@@ -187,8 +187,8 @@ Response (200):
 
 Create `.env.local` in the root directory:
 ```env
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_URL=https://lijbmbdbpceukaejreoa.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxpamJtYmRicGNldWthZWpyZW9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA2OTM5NTIsImV4cCI6MjA2NjI2OTk1Mn0._QCO4QqVP3giXDk41LGgzjAMkTvtbLi9gZnmpPkgej8
 ```
 
 ## Installation & Setup
@@ -198,7 +198,7 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 npm ci
 
 # Development
-npm run start:dev
+npm run start
 
 # Testing
 npm run test        # Unit tests with coverage
